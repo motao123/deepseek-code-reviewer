@@ -37,7 +37,6 @@ python --version
 
 如果未安装，去 [python.org](https://www.python.org/downloads/) 下载安装。**安装时务必勾选 "Add Python to PATH"**。
 
-> **[配图 A1：Python 安装界面截图，箭头指向 "Add Python to PATH" 复选框]**
 
 ---
 
@@ -47,19 +46,16 @@ python --version
 
 打开 [platform.deepseek.com](https://platform.deepseek.com)，使用手机号或邮箱注册账号。
 
-> **[配图 A2：DeepSeek 平台首页截图]**
 
 ### 2.2 进入 API Keys 管理页
 
 登录后，点击左侧菜单 **「API Keys」**。
 
-> **[配图 A3：左侧菜单栏截图，高亮 API Keys 选项]**
 
 ### 2.3 创建 Key
 
 点击 **「创建 API Key」** 按钮，输入名称（比如 `code-reviewer`），点击确认。
 
-> **[配图 A4：创建 API Key 弹窗截图]**
 
 ### 2.4 复制并保存 Key
 
@@ -67,13 +63,11 @@ python --version
 
 生成的 Key 格式类似：`sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
-> **[配图 A5：Key 生成后的复制界面截图，标注"请立即复制，关闭后不可见"]**
 
 ### 2.5 充值（如需）
 
 DeepSeek 新账号通常有赠送额度。如果额度用完，需要在 **「充值」** 页面充值。V4 模型价格约 **¥1/百万 token**，单个 PR 审查成本通常不超过 ¥0.1。
 
-> **[配图 A6：充值页面或价格表截图]**
 
 ---
 
@@ -85,7 +79,6 @@ DeepSeek 新账号通常有赠送额度。如果额度用完，需要在 **「�
 cd D:\code\文章\deepseek-code-reviewer
 ```
 
-> **[配图 A7：终端截图，显示当前工作目录为 deepseek-code-reviewer]**
 
 ### 3.2 创建虚拟环境（推荐）
 
@@ -102,7 +95,6 @@ source .venv/bin/activate
 
 激活成功后，终端提示符前会出现 `(.venv)` 标识。
 
-> **[配图 A8：终端截图，显示 (.venv) 前缀，说明虚拟环境已激活]**
 
 ### 3.3 安装依赖
 
@@ -116,7 +108,6 @@ pip install -r requirements.txt
 Successfully installed openai-... fastapi-... uvicorn-... ...
 ```
 
-> **[配图 A9：终端截图，显示依赖安装成功的输出]**
 
 ### 3.4 验证安装
 
@@ -155,7 +146,6 @@ MAX_CONTEXT_TOKENS=60000
 BATCH_SIZE=10
 ```
 
-> **[配图 A10：.env 文件内容截图，箭头指向 DEEPSEEK_API_KEY 行，标注"在此填入你的 Key"]**
 
 ### 4.3 各字段说明
 
@@ -184,7 +174,6 @@ python run.py <文件1> <文件2> ...
 python run.py app/utils.py
 ```
 
-> **[配图 A11：终端截图，显示审查单个文件的完整输出——审查进度、发现的问题列表、最终汇总统计]**
 
 你会看到类似输出：
 
@@ -253,7 +242,6 @@ python run.py --batch-size 5 app/*.py
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-> **[配图 A12：终端截图，显示 uvicorn 启动成功，输出 `Uvicorn running on http://0.0.0.0:8000`]**
 
 `--reload` 参数表示代码修改后自动重启，开发时非常方便。
 
@@ -261,7 +249,6 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 浏览器打开 [http://localhost:8000/docs](http://localhost:8000/docs)
 
-> **[配图 A13：浏览器截图，显示 Swagger UI 页面，展开 POST /review 接口]**
 
 ### 6.3 调用审查接口
 
@@ -278,7 +265,6 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 4. 点击 **「Execute」**
 
-> **[配图 A14：Swagger 截图，显示请求体和返回结果]**
 
 ### 6.4 返回结果示例
 
@@ -344,7 +330,6 @@ curl http://localhost:8000/review/status/abc123
 docker compose up -d
 ```
 
-> **[配图 A15：终端截图，显示 docker compose up 的输出，三个服务启动成功]**
 
 这会启动三个服务：
 
@@ -364,7 +349,6 @@ curl http://localhost:8000/health
 # 返回 {"status":"ok"}
 ```
 
-> **[配图 A16：终端截图，`docker compose ps` 输出显示三个服务状态为 running]**
 
 ### 7.4 查看日志
 
@@ -393,7 +377,6 @@ docker compose down
 → Celery 队列异步审查 → 审查结果以评论形式回帖到 PR
 ```
 
-> **[配图 A17：GitHub 集成架构流程图，展示从 PR 提交到审查评论的完整链路]**
 
 ### 8.2 创建 GitHub Token
 
@@ -404,7 +387,6 @@ docker compose down
    - `read:org`（如仓库在组织下）
 4. 点击生成，复制 Token
 
-> **[配图 A18：GitHub Token 创建页面截图，标注需要勾选的权限]**
 
 ### 8.3 配置 .env
 
@@ -422,7 +404,6 @@ GITHUB_TOKEN=ghp_你的GitHub Token
 4. 勾选 **「Pull requests」** 事件
 5. 点击 **Add webhook**
 
-> **[配图 A19：GitHub Webhook 配置页面截图，标注各配置项]**
 
 ### 8.5 Webhook 路由（需自行扩展）
 
@@ -454,7 +435,6 @@ async def github_webhook(event: dict, request: Request):
     return {"status": "received"}
 ```
 
-> **[配图 A20：GitHub PR 页面截图，展示自动评论"DeepSeek V4 正在审查中"和最终的审查报告评论]**
 
 ---
 

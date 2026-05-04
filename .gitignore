@@ -6,3 +6,4 @@ venv/
 redis_data/
 *.egg-info/
 dist/
+screenshots/
