@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_BASE_URL=${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      - REDIS_URL=redis://redis:6379/0
+      - MAX_CONTEXT_TOKENS=${MAX_CONTEXT_TOKENS:-60000}
+      - BATCH_SIZE=${BATCH_SIZE:-10}
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: celery -A app.tasks.celery_app worker --loglevel=info --concurrency=3
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_BASE_URL=${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      - REDIS_URL=redis://redis:6379/0
+      - MAX_CONTEXT_TOKENS=${MAX_CONTEXT_TOKENS:-60000}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  redis_data:

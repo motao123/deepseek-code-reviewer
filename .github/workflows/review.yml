@@ -1,0 +1,39 @@
+name: DeepSeek V4 Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Get changed files
+        id: files
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -v '\.lock$\|\.png$\|\.jpg$\|\.svg$' | paste -sd, -)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "count=$(echo $CHANGED | tr ',' '\n' | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Run DeepSeek V4 Review
+        if: steps.files.outputs.files != ''
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IFS=',' read -ra FILE_ARRAY <<< "${{ steps.files.outputs.files }}"
+          python run.py "${FILE_ARRAY[@]}"
